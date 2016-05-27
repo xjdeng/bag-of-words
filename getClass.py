@@ -5,6 +5,7 @@ import cv2
 import imutils 
 import numpy as np
 import os
+import RootSIFT as r
 from sklearn.svm import LinearSVC
 from sklearn.externals import joblib
 from scipy.cluster.vq import *
@@ -39,6 +40,7 @@ else:
 # Create feature extraction and keypoint detector objects
 fea_det = cv2.FeatureDetector_create("SIFT")
 des_ext = cv2.DescriptorExtractor_create("SIFT")
+rs = r.RootSIFT()
 
 # List where all the descriptors are stored
 des_list = []
@@ -48,8 +50,9 @@ for image_path in image_paths:
     if im == None:
         print "No such file {}\nCheck if the file exists".format(image_path)
         exit()
-    kpts = fea_det.detect(im)
-    kpts, des = des_ext.compute(im, kpts)
+    # kpts = fea_det.detect(im)
+    # kpts, des = des_ext.compute(im, kpts)
+    (kpts, des) = rs.detectAndCompute(im)
     des_list.append((image_path, des))   
     
 # Stack all the descriptors vertically in a numpy array
